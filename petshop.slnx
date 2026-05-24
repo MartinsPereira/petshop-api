@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Petshop.Application/Petshop.Application.csproj" Id="87abaac2-8760-4a1f-8dda-7020c2b12b9d" />
+  <Project Path="Petshop.Domain/Petshop.Domain.csproj" Id="ea3a8de2-d09a-45ad-b957-c12d9503b316" />
+  <Project Path="Petshop.Infra/Petshop.Infra.csproj" Id="5e0132dc-8a7f-4afc-9056-ace47f0c5592" />
+  <Project Path="petshop/Petshop.Api.csproj" />
+</Solution>
