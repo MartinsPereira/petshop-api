@@ -20,11 +20,11 @@ namespace Petshop.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Result<Customer>>> CreateCustomer([FromBody] CreateCustomerDto customer)
+        public async Task<ActionResult<Result<Customer>>> CreateCustomer([FromBody] CreateCustomerRequestDto customer)
         {
             var result = await customerService.CreateCustomer(customer);
 
-            return HandleValidateModel(HandleResult<Customer>(result));
+            return HandleResult<Customer>(result);
         }
     }
 }

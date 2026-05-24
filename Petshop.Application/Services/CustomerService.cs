@@ -1,5 +1,6 @@
 ﻿using Petshop.Application.Dtos.Customer;
 using Petshop.Application.Interfaces;
+using Petshop.Application.Validator.Customer;
 using Petshop.Domain.Common;
 using Petshop.Domain.Entities;
 using Petshop.Domain.Interfaces;
@@ -20,13 +21,14 @@ namespace Petshop.Application.Services
             return Result<Customer>.Success(customer, "Cliente encontrado com sucesso.");
         }
 
-        public async Task<Result<Customer>> CreateCustomer(CreateCustomerDto customer)
+        public async Task<Result<Customer>> CreateCustomer(CreateCustomerRequestDto customer)
         {
-            var existingCpf = await customerRepository.GetByCpf(customer.Cpf);
+            var validator = new CreateCustomerValidator(customerRepository);
+            var validationResult = await validator.ValidateAsync(customer);
 
-            if(existingCpf != null)
+            if (!validationResult.IsValid)
             {
-                return Result<Customer>.Failure("Já existe um cliente com esse cpf.");
+                return Result<Customer>.Failure(validationResult.Errors.First().ErrorMessage);
             }
 
             var existingEmail = await customerRepository.GetByEmail(customer.Email);
