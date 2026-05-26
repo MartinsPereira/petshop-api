@@ -13,7 +13,7 @@ namespace Petshop.Domain.Entities
         public string? Observations { get; set; }
         [ForeignKey("CustomerId")]
         public int CustomerId { get; set; }
-        public required Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
 
     }
 }

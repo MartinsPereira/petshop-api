@@ -21,14 +21,14 @@ namespace Petshop.Infra.Repository
         {
             var entry = context.Pets.Add(newPet);
             await context.SaveChangesAsync();
-            return entry.Entity;
+            return context.Pets.Include(p => p.Customer).FirstOrDefault(p => p.PetId == entry.Entity.PetId)!;
         }
 
         public async Task<Pet> UpdatePet(Pet updatedPet)
         {
             var entry = context.Pets.Update(updatedPet);
             await context.SaveChangesAsync();
-            return entry.Entity;
+            return context.Pets.Include(p => p.Customer).FirstOrDefault(p => p.PetId == entry.Entity.PetId)!;
         }
 
         public async Task<Pet> DeletePet(Pet updatedPet)

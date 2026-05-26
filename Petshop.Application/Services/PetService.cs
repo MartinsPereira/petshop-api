@@ -11,15 +11,7 @@ namespace Petshop.Application.Services
         public async Task<Result<IEnumerable<PetReponseDto>>> GetAllPets()
         {
             var allPets = await petRepository.GetAllAsync();
-            var listaPets = (IEnumerable<PetReponseDto>)allPets.Select(pet => new PetReponseDto
-            {
-                Id = pet.PetId,
-                Name = pet.Name,
-                Type = pet.Type,
-                Breed = pet.Breed,
-                Size = pet.Size,
-                Tutor = pet.Customer.Name
-            });
+            var listaPets = allPets.Select(MapToDto);
 
             return Result<IEnumerable<PetReponseDto>>.Success(listaPets, $"Lista de pets retornada com sucesso.");
         }
@@ -50,7 +42,6 @@ namespace Petshop.Application.Services
                 Observations = newPet.Observations,
                 Size = newPet.Size,
                 CustomerId = newPet.CustomerId,
-                Customer = customerResult.Entity
             };
 
             var created = await petRepository.CreatePet(petEntity);
@@ -70,6 +61,7 @@ namespace Petshop.Application.Services
             existingPet.BirthDate = newPet.BirthDate;
             existingPet.Observations = newPet.Observations;
             existingPet.Size = newPet.Size;
+            existingPet.CustomerId = newPet.CustomerId;
 
             var updated = await petRepository.UpdatePet(existingPet);
             return Result<PetReponseDto>.Success(MapToDto(updated), $"Pet atualizado com sucesso.");
@@ -93,7 +85,7 @@ namespace Petshop.Application.Services
             Type = pet.Type,
             Breed = pet.Breed,
             Size = pet.Size,
-            Tutor = pet.Customer.Name
+            Tutor = pet.Customer?.Name ?? ""
         };
     }
 }

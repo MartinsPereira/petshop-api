@@ -52,6 +52,11 @@ namespace Petshop.Infra.Configurations
                 .HasColumnName("CreatedAt")
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            builder.HasOne(p => p.Customer)
+               .WithMany(c => c.Pets)
+               .HasForeignKey(p => p.CustomerId)
+               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

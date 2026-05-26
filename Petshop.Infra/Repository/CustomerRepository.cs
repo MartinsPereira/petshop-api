@@ -9,26 +9,40 @@ namespace Petshop.Infra.Repository
     {
         public async Task<IEnumerable<Customer>> GetAll()
         {
-            return await context.Customers.AsNoTracking().ToListAsync();
+            return await context.Customers.AsNoTracking().Include(c => c.Pets).ToListAsync();
         }
         public async Task<Customer?> GetById(int id)
         {
-            return await context.Customers.FirstOrDefaultAsync(u => u.CustomerId == id);
+            return await context.Customers.AsNoTracking().Include(c => c.Pets).FirstOrDefaultAsync(u => u.CustomerId == id);
         }
 
         public async Task<Customer?> GetByCpf(string cpf)
         {
-            return await context.Customers.FirstOrDefaultAsync(u => u.Cpf == cpf);
+            return await context.Customers.AsNoTracking().FirstOrDefaultAsync(u => u.Cpf == cpf);
         }
 
         public async Task<Customer?> GetByEmail(string email)
         {
-            return await context.Customers.FirstOrDefaultAsync(u => u.Email == email);
+            return await context.Customers.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<Customer> CreateCustomer(Customer customer)
         {
             var entity = context.Customers.Add(customer);
+            await context.SaveChangesAsync();
+            return entity.Entity;
+        }
+
+        public async Task<Customer> UpdateCustomer(Customer updatedCustomer)
+        {
+            var entity = context.Customers.Update(updatedCustomer);
+            await context.SaveChangesAsync();
+            return entity.Entity;
+        }
+
+        public async Task<Customer> DeleteCustomer(Customer removedCustomer)
+        {
+            var entity = context.Customers.Remove(removedCustomer);
             await context.SaveChangesAsync();
             return entity.Entity;
         }
